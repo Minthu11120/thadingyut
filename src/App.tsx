@@ -72,6 +72,14 @@ export default function App() {
     };
   }, [fetchWishes]);
 
+  // Periodic polling fallback for serverless environments (Vercel)
+  useEffect(() => {
+    const pollTimer = setInterval(() => {
+      fetchWishes();
+    }, 12000);
+    return () => clearInterval(pollTimer);
+  }, [fetchWishes]);
+
   // Connect to SSE stream for live real-time sync across all users
   useEffect(() => {
     let eventSource: EventSource | null = null;
