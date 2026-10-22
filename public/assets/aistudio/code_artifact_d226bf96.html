@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>သီတင်းကျွတ် မီးပုံးပျံ ဆုတောင်းလွှာ - Thadingyut Wishes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans Myanmar & Padauk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Noto+Sans+Myanmar:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Padauk', 'Noto Sans Myanmar', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            background: #020617;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Ambient Night Sky & Moon glow */
+        .sky-bg {
+            background: radial-gradient(circle at 75% 20%, #1e1b4b 0%, #0f172a 45%, #030712 100%);
+        }
+
+        .moon-glow {
+            box-shadow: 0 0 50px 20px rgba(254, 240, 138, 0.45),
+                        0 0 100px 50px rgba(251, 191, 36, 0.25),
+                        inset 0 0 25px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Lantern swaying and flicker animations */
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2.5deg); }
+            50% { transform: rotate(2.5deg); }
+        }
+
+        @keyframes flameFlicker {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.12); }
+        }
+
+        @keyframes floatCloud {
+            0% { transform: translateX(-10%); }
+            50% { transform: translateX(10%); }
+            100% { transform: translateX(-10%); }
+        }
+
+        .lantern-sway {
+            animation: sway 3.5s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+
+        .flame-glow {
+            animation: flameFlicker 1.8s ease-in-out infinite alternate;
+        }
+
+        .cloud-anim {
+            animation: floatCloud 45s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar for Wish Modals */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.4);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.7);
+        }
+    </style>
+</head>
+<body class="relative w-screen h-screen sky-bg text-amber-50">
+
+    <!-- Sky Animation Canvas -->
+    <canvas id="skyCanvas" class="absolute inset-0 w-full h-full pointer-events-auto z-10 cursor-pointer"></canvas>
+
+    <!-- Top Glow Moon & Floating Clouds (Decorative Backdrop) -->
+    <div class="absolute top-10 right-8 md:top-14 md:right-28 pointer-events-none z-0">
+        <div class="relative w-28 h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-tr from-amber-200 via-amber-100 to-yellow-50 moon-glow flex items-center justify-center">
+            <!-- Subtle Moon Texture / Craters -->
+            <div class="absolute w-6 h-6 rounded-full bg-amber-200/40 top-4 left-6 blur-[1px]"></div>
+            <div class="absolute w-8 h-8 rounded-full bg-amber-300/30 bottom-5 right-7 blur-[2px]"></div>
+            <div class="absolute w-4 h-4 rounded-full bg-yellow-400/25 top-10 right-5 blur-[1px]"></div>
+        </div>
+    </div>
+
+    <!-- Soft Cloud Silhouettes across the sky -->
+    <div class="absolute top-24 left-0 w-full pointer-events-none z-0 opacity-20 cloud-anim">
+        <svg class="w-full h-32 text-indigo-300 fill-current" viewBox="0 0 1440 200" preserveAspectRatio="none">
+            <path d="M0,96L80,112C160,128,320,160,480,160C640,160,800,128,960,122.7C1120,117,1280,139,1360,149.3L1440,160L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
+        </svg>
+    </div>
+
+    <!-- Myanmar Traditional Pagoda (စေတီတော်) Skyline at Horizon -->
+    <div class="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+        <svg class="w-full h-40 md:h-56 text-slate-950 fill-current drop-shadow-2xl" viewBox="0 0 1200 240" preserveAspectRatio="none">
+            <!-- Far hills -->
+            <path opacity="0.3" fill="#0f172a" d="M0,190 C250,140 450,210 700,165 C950,120 1100,170 1200,150 L1200,240 L0,240 Z"></path>
+            <!-- Mid Silhouettes of Pagodas & Palm Trees -->
+            <path opacity="0.6" fill="#030712" d="M0,210 C180,190 320,205 450,195 C620,185 750,210 900,190 C1050,170 1150,200 1200,195 L1200,240 L0,240 Z"></path>
+            
+            <!-- Shwedagon / Bagan style Stupas and Temple outlines -->
+            <!-- Temple 1 (Far Left Stupa) -->
+            <path d="M120,240 L120,215 L105,215 L120,175 L127,150 L129,120 L131,120 L133,150 L140,175 L155,215 L140,215 L140,240 Z"></path>
+            <!-- Spire Htee -->
+            <path d="M128,120 L132,120 L130,95 Z" stroke="#020617" stroke-width="2"></path>
+            <circle cx="130" cy="94" r="3"></circle>
+
+            <!-- Major Grand Pagoda (Center Left) -->
+            <path d="M260,240 L260,200 L240,200 L255,160 L275,130 L285,90 L287,55 L291,55 L293,90 L303,130 L323,160 L338,200 L318,200 L318,240 Z"></path>
+            <line x1="289" y1="55" x2="289" y2="28" stroke="#030712" stroke-width="3"></line>
+            <!-- Htee Tier rings -->
+            <ellipse cx="289" cy="38" rx="8" ry="3"></ellipse>
+            <ellipse cx="289" cy="46" rx="6" ry="2.5"></ellipse>
+            <circle cx="289" cy="25" r="4" fill="#fbbf24" class="opacity-90"></circle>
+
+            <!-- Exotic Bagan Temple Shape (Center Right) -->
+            <path d="M680,240 L680,180 L660,180 L675,150 L710,120 L713,80 L717,80 L720,120 L755,150 L770,180 L750,180 L750,240 Z"></path>
+            <line x1="715" y1="80" x2="715" y2="50" stroke="#030712" stroke-width="2.5"></line>
+            <circle cx="715" cy="48" r="3" fill="#fbbf24" class="opacity-80"></circle>
+
+            <!-- Right side pagoda & monastery outline -->
+            <path d="M980,240 L980,210 L965,210 L980,175 L995,145 L998,110 L1002,110 L1005,145 L1020,175 L1035,210 L1020,210 L1020,240 Z"></path>
+            <line x1="1000" y1="110" x2="1000" y2="85" stroke="#030712" stroke-width="2"></line>
+            <circle cx="1000" cy="83" r="3" fill="#fef08a" class="opacity-70"></circle>
+
+            <!-- Palm Tree silhouettes -->
+            <path d="M520,240 Q525,190 530,160 Q510,150 495,160 Q525,155 530,160 Q530,140 532,130 Q535,148 535,160 Q555,150 565,165 Q540,160 535,165 Q530,200 525,240 Z"></path>
+            <path d="M850,240 Q845,195 840,165 Q820,160 805,170 Q835,162 840,165 Q838,145 838,135 Q842,150 843,165 Q860,155 875,170 Q850,165 845,168 Q848,200 852,240 Z"></path>
+        </svg>
+
+        <!-- Golden Oil Lamp String at the bottom edge -->
+        <div class="h-4 bg-gradient-to-r from-amber-600/30 via-yellow-500/40 to-amber-600/30 border-t border-amber-500/30 flex items-center justify-around px-4">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse"></span>
+            <span class="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_8px_#f59e0b] animate-pulse delay-75"></span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse delay-150"></span>
+            <span class="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_8px_#f59e0b] animate-pulse delay-300"></span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse"></span>
+            <span class="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_8px_#f59e0b] animate-pulse delay-200"></span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse"></span>
+        </div>
+    </div>
+
+    <!-- Header Navigation & Info Bar -->
+    <header class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-6 py-4 bg-gradient-to-b from-slate-950/80 via-slate-900/30 to-transparent backdrop-blur-[2px]">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-slate-950">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="text-lg sm:text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400">
+                    သီတင်းကျွတ် မီးပုံးပျံ ဆုတောင်းလွှာ
+                </h1>
+                <p class="text-xs text-amber-200/70 hidden sm:block">
+                    မီးပုံးလေးများကို နှိပ်၍ အခြားသူများ၏ မေတ္တာဆုတောင်းစာများကို ဖတ်ရှုနိုင်ပါသည်
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Audio Toggle Button -->
+            <button id="audioToggleBtn" title="အသံ ဖွင့်/ပိတ်" class="p-2.5 rounded-full bg-slate-900/80 border border-amber-500/30 text-amber-300 hover:text-amber-100 hover:bg-slate-800 transition active:scale-95 shadow-md flex items-center gap-1.5 text-xs">
+                <i data-lucide="volume-2" id="audioIcon" class="w-4 h-4"></i>
+                <span class="hidden md:inline text-amber-200" id="audioText">အသံ ဖွင့်ထား</span>
+            </button>
+
+            <!-- All Wishes List Button -->
+            <button id="openWishesWallBtn" class="px-3.5 py-2 rounded-full bg-slate-900/80 border border-amber-500/30 text-amber-300 hover:text-amber-100 hover:bg-slate-800 transition active:scale-95 shadow-md flex items-center gap-2 text-xs sm:text-sm font-medium">
+                <i data-lucide="book-heart" class="w-4 h-4 text-amber-400"></i>
+                <span>ဆုတောင်းစာများ (<span id="wishCountBadge">0</span>)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating Hint Banner (Disappears after first interaction) -->
+    <div id="skyGuideHint" class="absolute top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-all duration-700 opacity-90 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/20 backdrop-blur-md text-center text-xs text-amber-200 flex items-center gap-2 shadow-lg">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+        <span>ကောင်းကင်ရှိ မီးပုံးပျံလေးများကို နှိပ်၍ ဆုတောင်းစာများ ဖတ်ရှုပါ</span>
+    </div>
+
+    <!-- Bottom Center Call-To-Action: Release Lantern Button -->
+    <div class="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 w-full max-w-xs px-4">
+        <button id="openCreateModalBtn" class="group w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-bold text-base sm:text-lg shadow-[0_0_30px_rgba(245,158,11,0.55)] hover:shadow-[0_0_40px_rgba(245,158,11,0.8)] active:scale-95 transition-all transform flex items-center justify-center gap-3 border border-amber-200/50">
+            <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-900 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-950"></span>
+            </span>
+            <span>ဆုတောင်းမီးပုံး လွှတ်တင်မည်</span>
+            <i data-lucide="flame" class="w-5 h-5 text-amber-900 group-hover:rotate-12 transition-transform"></i>
+        </button>
+        <span class="text-[11px] text-amber-200/60 font-medium">မြန်မာ့ရိုးရာ သီတင်းကျွတ် မီးထွန်းပွဲတော်</span>
+    </div>
+
+    <!-- MODAL 1: Create & Release Lantern Modal -->
+    <div id="createModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/40 rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <!-- Modal ambient glow accent -->
+            <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-amber-500/20 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🏮</span>
+                    <h2 class="text-lg font-bold text-amber-300">ဆုတောင်းမီးပုံးပျံ လွှတ်တင်ခြင်း</h2>
+                </div>
+                <button id="closeCreateModalBtn" class="p-1 rounded-full text-slate-400 hover:text-amber-200 hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto pr-1 space-y-4">
+                <!-- Name input -->
+                <div>
+                    <label class="block text-xs font-medium text-amber-200/80 mb-1">
+                        သင့်အမည် သို့မဟုတ် ချစ်စနိုးနာမည် (မထည့်လည်းရပါသည်)
+                    </label>
+                    <input type="text" id="wishSenderName" maxlength="30" placeholder="ဥပမာ - မောင်မောင်၊ သုတ၊ အမည်မဖော်လိုသူ" 
+                           class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/80 border border-amber-500/30 text-amber-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm">
+                </div>
+
+                <!-- Wish Content Textarea -->
+                <div>
+                    <label class="block text-xs font-medium text-amber-200/80 mb-1">
+                        ဆုတောင်းစကား / မေတ္တာပို့သလွှာ <span class="text-amber-400">*</span>
+                    </label>
+                    <textarea id="wishMessageText" rows="3" maxlength="220" placeholder="သီတင်းကျွတ်မှာ မိမိတောင့်တသော ဆန္ဒ သို့မဟုတ် ချစ်ရသူများအတွက် ဆုမွန်ကောင်း ရေးသားပါ..."
+                              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/80 border border-amber-500/30 text-amber-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-1 text-[11px] text-amber-200/50">
+                        <span>မေတ္တာစေတနာဖြင့် ရေးသားပါ</span>
+                        <span id="charCounter">0 / 220</span>
+                    </div>
+                </div>
+
+                <!-- Fast Blessing Suggestions -->
+                <div>
+                    <label class="block text-xs font-medium text-amber-200/80 mb-1.5 flex items-center gap-1">
+                        <i data-lucide="sparkle" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>အမြန်ရွေးချယ်ရန် မေတ္တာပို့ဆုတောင်းများ</span>
+                    </label>
+                    <div class="flex flex-wrap gap-1.5" id="blessingChips">
+                        <button type="button" class="chip-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-950/60 border border-amber-500/20 text-amber-200/90 transition text-left active:scale-95">
+                            မိဘဘိုးဘွားများ သက်ရှည်ကျန်းမာပါစေ
+                        </button>
+                        <button type="button" class="chip-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-950/60 border border-amber-500/20 text-amber-200/90 transition text-left active:scale-95">
+                            မိသားစုအားလုံး စိတ်ချမ်းသာ ကိုယ်ကျန်းမာရှိကြပါစေ
+                        </button>
+                        <button type="button" class="chip-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-950/60 border border-amber-500/20 text-amber-200/90 transition text-left active:scale-95">
+                            မြန်မာပြည်ကြီး အမြန်ဆုံး အေးချမ်းသာယာပါစေ
+                        </button>
+                        <button type="button" class="chip-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-950/60 border border-amber-500/20 text-amber-200/90 transition text-left active:scale-95">
+                            ကြံစည်သမျှ လိုအင်ဆန္ဒများ အားလုံးပြည့်ဝပါစေ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lantern Color Selection -->
+                <div>
+                    <label class="block text-xs font-medium text-amber-200/80 mb-2">
+                        မီးပုံးအရောင် ရွေးချယ်ပါ
+                    </label>
+                    <div class="grid grid-cols-5 gap-2" id="colorPickerGroup">
+                        <!-- Gold -->
+                        <button type="button" data-color="gold" class="color-btn active-color p-2 rounded-xl flex flex-col items-center gap-1 border-2 border-amber-400 bg-amber-500/10 transition">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-t from-amber-600 via-amber-400 to-yellow-200 shadow-[0_0_8px_#f59e0b]"></span>
+                            <span class="text-[10px] text-amber-200">ရွှေဝါ</span>
+                        </button>
+                        <!-- Ruby Red -->
+                        <button type="button" data-color="ruby" class="color-btn p-2 rounded-xl flex flex-col items-center gap-1 border-2 border-transparent bg-slate-800/80 hover:bg-red-950/30 transition">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-t from-red-600 via-rose-500 to-pink-300 shadow-[0_0_8px_#ef4444]"></span>
+                            <span class="text-[10px] text-amber-200">ပတ္တမြား</span>
+                        </button>
+                        <!-- Emerald Green -->
+                        <button type="button" data-color="emerald" class="color-btn p-2 rounded-xl flex flex-col items-center gap-1 border-2 border-transparent bg-slate-800/80 hover:bg-emerald-950/30 transition">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-t from-emerald-600 via-green-400 to-teal-200 shadow-[0_0_8px_#10b981]"></span>
+                            <span class="text-[10px] text-amber-200">မြစိမ်း</span>
+                        </button>
+                        <!-- Royal Purple/Sapphire -->
+                        <button type="button" data-color="violet" class="color-btn p-2 rounded-xl flex flex-col items-center gap-1 border-2 border-transparent bg-slate-800/80 hover:bg-purple-950/30 transition">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-t from-indigo-600 via-purple-400 to-pink-200 shadow-[0_0_8px_#a855f7]"></span>
+                            <span class="text-[10px] text-amber-200">နီလာ</span>
+                        </button>
+                        <!-- Lotus Pink -->
+                        <button type="button" data-color="pink" class="color-btn p-2 rounded-xl flex flex-col items-center gap-1 border-2 border-transparent bg-slate-800/80 hover:bg-pink-950/30 transition">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-t from-pink-600 via-rose-400 to-white shadow-[0_0_8px_#ec4899]"></span>
+                            <span class="text-[10px] text-amber-200">ကြာပန်း</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-5 pt-3 border-t border-amber-500/20">
+                <button id="sendLanternBtn" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-bold text-base shadow-[0_0_20px_rgba(245,158,11,0.5)] hover:shadow-[0_0_25px_rgba(245,158,11,0.7)] transition active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>ကောင်းကင်သို့ လွှတ်တင်မည်</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: View Single Lantern Wish Modal -->
+    <div id="viewWishModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative w-full max-w-sm bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-400/40 rounded-3xl p-6 shadow-2xl text-center overflow-hidden">
+            <!-- Lantern Ambient Ring Background -->
+            <div id="viewModalGlow" class="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-amber-500/25 rounded-full blur-3xl pointer-events-none"></div>
+
+            <button id="closeViewWishBtn" class="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:text-amber-200 hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Lantern Icon Graphic -->
+            <div class="mx-auto w-16 h-20 mb-3 flex flex-col items-center justify-center relative">
+                <div id="viewLanternVisual" class="w-12 h-14 rounded-2xl border-2 border-amber-300 flex items-center justify-center shadow-lg relative bg-amber-500/20">
+                    <span class="w-3 h-4 bg-amber-200 rounded-full blur-[1px] flame-glow"></span>
+                </div>
+                <div class="w-5 h-2 bg-amber-600/60 rounded-b mt-0.5"></div>
+            </div>
+
+            <span id="viewWishTag" class="inline-block text-[11px] px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-2">
+                သီတင်းကျွတ် မေတ္တာမီးပုံး
+            </span>
+
+            <p id="viewWishText" class="text-base sm:text-lg text-amber-100 font-medium leading-relaxed my-3 px-2 italic">
+                "မိသားစုအားလုံး ကိုယ်စိတ်နှစ်ဖြာ ကျန်းမာချမ်းသာကြပါစေ"
+            </p>
+
+            <div class="pt-3 border-t border-amber-500/20 text-xs text-amber-300/80 flex items-center justify-between mt-4">
+                <span class="flex items-center gap-1 font-semibold">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span id="viewWishAuthor">အမည်မဖော်လိုသူ</span>
+                </span>
+                <span id="viewWishTime" class="text-amber-200/50">ခုနက</span>
+            </div>
+
+            <!-- Like button inside modal -->
+            <div class="mt-4 flex items-center justify-center gap-2">
+                <button id="modalLikeBtn" class="px-4 py-2 rounded-full bg-slate-800/90 border border-amber-500/30 hover:border-amber-400 text-xs text-amber-200 flex items-center gap-1.5 transition active:scale-90">
+                    <i data-lucide="heart" class="w-4 h-4 text-rose-400" id="modalLikeIcon"></i>
+                    <span id="modalLikeCount">0</span>
+                    <span>သာဓုခေါ်ပါသည်</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: All Wishes Board / Wall -->
+    <div id="wishesWallModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+        <div class="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-amber-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col max-h-[88vh]">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-amber-500/20">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 bg-amber-500/20 rounded-xl text-amber-400 border border-amber-500/30">
+                        <i data-lucide="scroll-text" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-amber-300">ဆုတောင်းမေတ္တာလွှာများ အားလုံး</h2>
+                        <p class="text-xs text-amber-200/60">လူတိုင်း၏ ရည်စူးဆုတောင်းစာများကို အတူတကွ သာဓုခေါ်ဆိုနိုင်ပါသည်</p>
+                    </div>
+                </div>
+                <button id="closeWishesWallBtn" class="p-1.5 rounded-full text-slate-400 hover:text-amber-200 hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="my-3 flex items-center gap-2">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="wishSearchInput" placeholder="ဆုတောင်းစာ သို့မဟုတ် အမည်ဖြင့် ရှာရန်..." 
+                           class="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-800/80 border border-amber-500/20 text-xs text-amber-100 placeholder-slate-400 focus:outline-none focus:border-amber-400">
+                </div>
+                <button id="wallReleaseBtn" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition flex items-center gap-1 shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span>ဆုတောင်းရေးမည်</span>
+                </button>
+            </div>
+
+            <!-- Cards Container -->
+            <div id="wishesCardGrid" class="flex-1 overflow-y-auto space-y-3 pr-1 py-1">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transform -translate-y-10 opacity-0 transition-all duration-300 px-4 py-2.5 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs shadow-2xl flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 text-slate-950"></i>
+        <span id="toastMessage">မီးပုံးပျံ အောင်မြင်စွာ လွှတ်တင်ပြီးပါပြီ!</span>
+    </div>
+
+    <!-- Sound & Logic Script -->
+    <script>
+        // Preset Color Schemes for Lanterns
+        const LANTERN_PALETTES = {
+            gold: {
+                name: 'ရွှေဝါရောင်',
+                core: '#fef08a',
+                mid: '#f59e0b',
+                edge: '#b45309',
+                glow: 'rgba(245, 158, 11, 0.45)',
+                border: '#fde047'
+            },
+            ruby: {
+                name: 'ပတ္တမြားရောင်',
+                core: '#fecdd3',
+                mid: '#f43f5e',
+                edge: '#9f1239',
+                glow: 'rgba(244, 63, 94, 0.45)',
+                border: '#fda4af'
+            },
+            emerald: {
+                name: 'မြစိမ်းရောင်',
+                core: '#ccfbf1',
+                mid: '#10b981',
+                edge: '#065f46',
+                glow: 'rgba(16, 185, 129, 0.45)',
+                border: '#6ee7b7'
+            },
+            violet: {
+                name: 'နီလာရောင်',
+                core: '#f3e8ff',
+                mid: '#a855f7',
+                edge: '#6b21a8',
+                glow: 'rgba(168, 85, 247, 0.45)',
+                border: '#d8b4fe'
+            },
+            pink: {
+                name: 'ကြာပန်းရောင်',
+                core: '#fce7f3',
+                mid: '#ec4899',
+                edge: '#9d174d',
+                glow: 'rgba(236, 72, 153, 0.45)',
+                border: '#f9a8d4'
+            }
+        };
+
+        // Initial Sample Wishes
+        const INITIAL_WISHES = [
+            {
+                id: 'w-1',
+                name: 'အမေနှင့် မိသားစု',
+                text: 'သီတင်းကျွတ် မင်္ဂလာအခါသမယမှာ မိသားစုအားလုံး ကိုယ်စိတ်နှစ်ဖြာ ကျန်းမာချမ်းသာပြီး လိုရာဆန္ဒများ ပြည့်ဝကြပါစေ။',
+                color: 'gold',
+                likes: 18,
+                time: 'မကြာသေးမီက'
+            },
+            {
+                id: 'w-2',
+                name: 'ကိုသူရိန်',
+                text: 'မြန်မာပြည်ကြီး အမြန်ဆုံး အေးချမ်းပါစေ။ ပြည်သူအားလုံး စိတ်အေးချမ်းသာစွာ နေထိုင်နိုင်ကြပါစေ။',
+                color: 'ruby',
+                likes: 42,
+                time: 'မကြာသေးမီက'
+            },
+            {
+                id: 'w-3',
+                name: 'သုတလင်း',
+                text: 'မိဘဘိုးဘွားများနှင့် ဆရာသမားများအားလုံး သက်ရှည်ကျန်းမာ ပျော်ရွှင်ကြပါစေခင်ဗျာ။',
+                color: 'emerald',
+                likes: 12,
+                time: '၁ နာရီခန့်က'
+            },
+            {
+                id: 'w-4',
+                name: 'မဆုမြတ်',
+                text: 'ဝေးကွာနေသော ချစ်ရသူများအားလုံး ဘေးအန္တရာယ်ကင်းပြီး အမြန်ဆုံး ပြန်လည်ဆုံဆည်းနိုင်ပါစေ။',
+                color: 'pink',
+                likes: 27,
+                time: '၂ နာရီခန့်က'
+            },
+            {
+                id: 'w-5',
+                name: 'အမည်မဖော်လိုသူ',
+                text: 'ကြိုးစားနေသော အလုပ်အကိုင် ပညာရေးတိုင်း အောင်မြင်ချောမွေ့ကြပါစေ။',
+                color: 'violet',
+                likes: 9,
+                time: 'ယနေ့'
+            }
+        ];
+
+        // State Management
+        let wishes = [];
+        let activeSelectedColor = 'gold';
+        let currentInspectedWish = null;
+        let isAudioMuted = false;
+        let audioCtx = null;
+
+        // Load & Initialize Wishes from LocalStorage
+        function initWishesData() {
+            try {
+                const stored = localStorage.getItem('thadingyut_wishes_v1');
+                if (stored) {
+                    wishes = JSON.parse(stored);
+                } else {
+                    wishes = [...INITIAL_WISHES];
+                    saveWishesToStorage();
+                }
+            } catch (e) {
+                wishes = [...INITIAL_WISHES];
+            }
+            updateWishCountBadge();
+        }
+
+        function saveWishesToStorage() {
+            try {
+                localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(wishes));
+            } catch (e) {
+                console.error("Storage error:", e);
+            }
+            updateWishCountBadge();
+        }
+
+        function updateWishCountBadge() {
+            const badge = document.getElementById('wishCountBadge');
+            if (badge) badge.textContent = wishes.length;
+        }
+
+        // --- WEB AUDIO API: Traditional Burmese Temple Chime & Bell Sounds ---
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Play gentle resonant brass temple gong / bell chime
+        function playChimeSound(freq = 660, duration = 2.8) {
+            if (isAudioMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Bell partial overtone
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                // Slight frequency slide for singing bowl effect
+                osc.frequency.exponentialRampToValueAtTime(freq * 0.998, now + duration);
+
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.2, now + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + duration);
+
+                // Add harmonic second overtone
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(freq * 2.76, now); // Metallic overtone ratio
+                gain2.gain.setValueAtTime(0, now);
+                gain2.gain.linearRampToValueAtTime(0.05, now + 0.02);
+                gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.7));
+
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(now);
+                osc2.stop(now + (duration * 0.7));
+            } catch (err) {
+                console.warn("Audio chime prevented:", err);
+            }
+        }
+
+        function playLaunchSound() {
+            if (isAudioMuted) return;
+            playChimeSound(523.25, 3.2); // C5 temple tone
+            setTimeout(() => playChimeSound(659.25, 3.0), 200); // E5
+            setTimeout(() => playChimeSound(783.99, 3.5), 450); // G5
+        }
+
+        function playTapLanternSound() {
+            playChimeSound(880, 1.8);
+        }
+
+        // --- CANVAS PARTICLES & FLOATING LANTERNS ENGINE ---
+        const canvas = document.getElementById('skyCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = 0;
+        let height = 0;
+        let stars = [];
+        let activeLanterns = [];
+        let sparkles = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            generateStars();
+        }
+
+        function generateStars() {
+            stars = [];
+            const count = Math.floor((width * height) / 3800);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * (height * 0.75),
+                    radius: Math.random() * 1.3 + 0.3,
+                    alpha: Math.random() * 0.8 + 0.2,
+                    speed: Math.random() * 0.02 + 0.005,
+                    direction: Math.random() > 0.5 ? 1 : -1
+                });
+            }
+        }
+
+        // Lantern Object Definition
+        class SkyLantern {
+            constructor(wishData, x = null, y = null, isNew = false) {
+                this.wish = wishData;
+                this.x = x !== null ? x : Math.random() * (width - 80) + 40;
+                this.y = y !== null ? y : (isNew ? height + 20 : Math.random() * (height * 0.75) + 50);
+
+                // Depth & Size (far lanterns are smaller and slower)
+                this.depth = isNew ? 1.0 : (Math.random() * 0.65 + 0.45);
+                this.w = 34 * this.depth;
+                this.h = 44 * this.depth;
+
+                // Motion
+                this.vy = -(Math.random() * 0.4 + 0.3) * (this.depth * 1.1);
+                this.vx = (Math.random() - 0.5) * 0.25;
+                this.angle = 0;
+                this.swaySpeed = Math.random() * 0.025 + 0.015;
+                this.swayOffset = Math.random() * Math.PI * 2;
+
+                // Color palette
+                this.palette = LANTERN_PALETTES[wishData.color] || LANTERN_PALETTES.gold;
+                this.isNew = isNew;
+                this.launchSparkleCooldown = 0;
+            }
+
+            update() {
+                this.y += this.vy;
+                this.angle += this.swaySpeed;
+                this.x += Math.sin(this.angle + this.swayOffset) * 0.45 + this.vx;
+
+                // Emit occasional embers if recently launched
+                if (this.isNew && this.y > height * 0.35) {
+                    this.launchSparkleCooldown++;
+                    if (this.launchSparkleCooldown % 6 === 0) {
+                        createEmber(this.x, this.y + this.h, this.palette.mid);
+                    }
+                }
+
+                // Wrap-around when floating past the top
+                if (this.y < -this.h - 10) {
+                    this.y = height + 10;
+                    this.x = Math.random() * (width - 60) + 30;
+                    // Switch to a random wish from pool so all are featured over time
+                    if (wishes.length > 0) {
+                        this.wish = wishes[Math.floor(Math.random() * wishes.length)];
+                        this.palette = LANTERN_PALETTES[this.wish.color] || LANTERN_PALETTES.gold;
+                    }
+                }
+            }
+
+            draw(context) {
+                context.save();
+                context.translate(this.x, this.y);
+
+                // Sway tilt
+                const tilt = Math.sin(this.angle + this.swayOffset) * 0.08;
+                context.rotate(tilt);
+
+                // 1. Soft Warm Radial Glow aura
+                const glowRadius = this.w * 2.2;
+                const glowGrad = context.createRadialGradient(0, 0, 0, 0, 0, glowRadius);
+                glowGrad.addColorStop(0, this.palette.glow);
+                glowGrad.addColorStop(0.5, this.palette.glow.replace(/[\d\.]+\)$/, '0.15)'));
+                glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+
+                context.fillStyle = glowGrad;
+                context.beginPath();
+                context.arc(0, 0, glowRadius, 0, Math.PI * 2);
+                context.fill();
+
+                // 2. Myanmar Traditional Hexagonal/Round Paper Lantern Body
+                const halfW = this.w / 2;
+                const halfH = this.h / 2;
+
+                // Gradient for translucent glowing paper
+                const bodyGrad = context.createLinearGradient(0, -halfH, 0, halfH);
+                bodyGrad.addColorStop(0, this.palette.edge);
+                bodyGrad.addColorStop(0.4, this.palette.mid);
+                bodyGrad.addColorStop(0.85, this.palette.core);
+                bodyGrad.addColorStop(1, '#ffffff');
+
+                context.beginPath();
+                // Dome top
+                context.moveTo(-halfW * 0.65, -halfH);
+                context.quadraticCurveTo(0, -halfH * 1.25, halfW * 0.65, -halfH);
+                // Right bulged body
+                context.bezierCurveTo(halfW * 1.15, -halfH * 0.3, halfW * 1.1, halfH * 0.7, halfW * 0.6, halfH);
+                // Base bottom rim
+                context.lineTo(-halfW * 0.6, halfH);
+                // Left bulged body
+                context.bezierCurveTo(-halfW * 1.1, halfH * 0.7, -halfW * 1.15, -halfH * 0.3, -halfW * 0.65, -halfH);
+                context.closePath();
+
+                context.fillStyle = bodyGrad;
+                context.shadowColor = this.palette.mid;
+                context.shadowBlur = 12 * this.depth;
+                context.fill();
+
+                // Bamboo rib wire rings on lantern
+                context.shadowBlur = 0;
+                context.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+                context.lineWidth = 1 * this.depth;
+
+                // Horizontal wire curves
+                [-halfH * 0.45, 0, halfH * 0.45].forEach(yPos => {
+                    context.beginPath();
+                    context.ellipse(0, yPos, halfW * 0.8, 2.5 * this.depth, 0, 0, Math.PI * 2);
+                    context.stroke();
+                });
+
+                // Central Vertical crease
+                context.beginPath();
+                context.moveTo(0, -halfH * 1.1);
+                context.lineTo(0, halfH);
+                context.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+                context.stroke();
+
+                // 3. Bottom wooden base frame and Candle flame
+                context.fillStyle = '#78350f';
+                context.fillRect(-halfW * 0.65, halfH, this.w * 0.65, 3.5 * this.depth);
+
+                // Small flickering candle wick flame at the opening
+                const flameY = halfH - 2;
+                const flameSize = 4.5 * this.depth;
+                const flameGlow = Math.sin(Date.now() * 0.01 + this.x) * 1.2;
+
+                context.fillStyle = '#fffbeb';
+                context.beginPath();
+                context.ellipse(0, flameY, flameSize + flameGlow * 0.5, flameSize * 1.5 + flameGlow, 0, 0, Math.PI * 2);
+                context.fill();
+
+                // Small wish indicator tag if high depth
+                if (this.depth > 0.75) {
+                    context.fillStyle = 'rgba(254, 243, 199, 0.85)';
+                    context.font = `${Math.max(9, 10 * this.depth)}px Padauk, sans-serif`;
+                    context.textAlign = 'center';
+                    const snippet = (this.wish.name || 'မေတ္တာမီးပုံး');
+                    context.fillText(snippet.substring(0, 8), 0, halfH + 13 * this.depth);
+                }
+
+                context.restore();
+            }
+
+            contains(px, py) {
+                // Click bounding box tolerance
+                const hitRadius = Math.max(this.w, 32);
+                const dx = px - this.x;
+                const dy = py - this.y;
+                return (dx * dx + dy * dy) <= (hitRadius * hitRadius);
+            }
+        }
+
+        // Particle Embers
+        function createEmber(x, y, color) {
+            sparkles.push({
+                x: x + (Math.random() - 0.5) * 12,
+                y: y + Math.random() * 4,
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: Math.random() * 1.5 + 1.2,
+                radius: Math.random() * 2 + 1,
+                alpha: 1,
+                decay: Math.random() * 0.02 + 0.02,
+                color: color || '#fbbf24'
+            });
+        }
+
+        // Fireworks Burst when releasing
+        function triggerFirework(originX, originY, color) {
+            const count = 35;
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+                const speed = Math.random() * 3.5 + 1.5;
+                sparkles.push({
+                    x: originX,
+                    y: originY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    radius: Math.random() * 2.5 + 1,
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.015,
+                    color: color || '#fde047'
+                });
+            }
+        }
+
+        // Populate Floating Lanterns Flock
+        function seedLanterns() {
+            activeLanterns = [];
+            const desiredCount = Math.min(24, Math.max(12, Math.floor(width / 50)));
+
+            for (let i = 0; i < desiredCount; i++) {
+                const randomWish = wishes[i % wishes.length] || INITIAL_WISHES[0];
+                const lantern = new SkyLantern(randomWish);
+                activeLanterns.push(lantern);
+            }
+        }
+
+        // Main Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // 1. Draw twinkling stars
+            for (let i = 0; i < stars.length; i++) {
+                const s = stars[i];
+                s.alpha += s.speed * s.direction;
+                if (s.alpha > 0.95) {
+                    s.alpha = 0.95;
+                    s.direction = -1;
+                } else if (s.alpha < 0.15) {
+                    s.alpha = 0.15;
+                    s.direction = 1;
+                }
+
+                ctx.fillStyle = `rgba(254, 240, 138, ${s.alpha})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 2. Draw & Update Embers / Sparkles
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                const p = sparkles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= p.decay;
+
+                if (p.alpha <= 0) {
+                    sparkles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 3. Sort Lanterns by depth so foreground renders on top
+            activeLanterns.sort((a, b) => a.depth - b.depth);
+
+            // 4. Update and Draw Lanterns
+            for (let i = 0; i < activeLanterns.length; i++) {
+                const lantern = activeLanterns[i];
+                lantern.update();
+                lantern.draw(ctx);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- INTERACTION & EVENT LISTENERS ---
+
+        // Canvas Click: Inspect Lantern
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const clickX = clientX - rect.left;
+            const clickY = clientY - rect.top;
+
+            // Check clicked lantern (highest depth first)
+            for (let i = activeLanterns.length - 1; i >= 0; i--) {
+                const lantern = activeLanterns[i];
+                if (lantern.contains(clickX, clickY)) {
+                    // Hide hint on first success
+                    document.getElementById('skyGuideHint').style.opacity = '0';
+                    playTapLanternSound();
+                    openWishInspectionModal(lantern.wish);
+                    return;
+                }
+            }
+        }
+
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('touchstart', (e) => {
+            // Only fire if single tap
+            if (e.touches.length === 1) {
+                handleCanvasClick(e);
+            }
+        }, { passive: true });
+
+        // Show Single Wish Details
+        function openWishInspectionModal(wish) {
+            currentInspectedWish = wish;
+            const palette = LANTERN_PALETTES[wish.color] || LANTERN_PALETTES.gold;
+
+            document.getElementById('viewWishAuthor').textContent = wish.name || 'အမည်မဖော်လိုသူ';
+            document.getElementById('viewWishText').textContent = `"${wish.text}"`;
+            document.getElementById('viewWishTime').textContent = wish.time || 'မကြာသေးမီက';
+            document.getElementById('modalLikeCount').textContent = wish.likes || 0;
+            document.getElementById('viewWishTag').textContent = `${palette.name} မီးပုံးပျံ`;
+
+            // Style visual icon
+            const visual = document.getElementById('viewLanternVisual');
+            visual.style.borderColor = palette.border;
+            visual.style.backgroundColor = palette.mid + '33';
+            visual.style.boxShadow = `0 0 20px ${palette.glow}`;
+
+            document.getElementById('viewModalGlow').style.backgroundColor = palette.glow;
+
+            const modal = document.getElementById('viewWishModal');
+            modal.classList.remove('hidden');
+        }
+
+        document.getElementById('closeViewWishBtn').addEventListener('click', () => {
+            document.getElementById('viewWishModal').classList.add('hidden');
+        });
+
+        // Like / Sadhu Reaction
+        document.getElementById('modalLikeBtn').addEventListener('click', () => {
+            if (!currentInspectedWish) return;
+            currentInspectedWish.likes = (currentInspectedWish.likes || 0) + 1;
+            document.getElementById('modalLikeCount').textContent = currentInspectedWish.likes;
+            playChimeSound(987.77, 1.5); // High B5 chime
+            saveWishesToStorage();
+            showToast('သာဓု... သာဓု... သာဓု ခေါ်ဆိုပါသည် ✨');
+        });
+
+        // --- Create & Release Lantern Modal Management ---
+        const createModal = document.getElementById('createModal');
+        const openCreateModalBtn = document.getElementById('openCreateModalBtn');
+        const closeCreateModalBtn = document.getElementById('closeCreateModalBtn');
+        const sendLanternBtn = document.getElementById('sendLanternBtn');
+        const wishMessageInput = document.getElementById('wishMessageText');
+        const wishSenderNameInput = document.getElementById('wishSenderName');
+        const charCounter = document.getElementById('charCounter');
+
+        openCreateModalBtn.addEventListener('click', () => {
+            initAudio();
+            createModal.classList.remove('hidden');
+            wishMessageInput.focus();
+        });
+
+        closeCreateModalBtn.addEventListener('click', () => {
+            createModal.classList.add('hidden');
+        });
+
+        // Character Counter
+        wishMessageInput.addEventListener('input', () => {
+            charCounter.textContent = `${wishMessageInput.value.length} / 220`;
+        });
+
+        // Blessing chips click helper
+        document.querySelectorAll('.chip-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                wishMessageInput.value = btn.innerText.trim();
+                charCounter.textContent = `${wishMessageInput.value.length} / 220`;
+                playChimeSound(700, 0.4);
+            });
+        });
+
+        // Color Picker buttons
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.color-btn').forEach(b => {
+                    b.classList.remove('active-color', 'border-amber-400', 'bg-amber-500/10');
+                    b.classList.add('border-transparent');
+                });
+                btn.classList.add('active-color', 'border-amber-400', 'bg-amber-500/10');
+                btn.classList.remove('border-transparent');
+                activeSelectedColor = btn.dataset.color;
+                playChimeSound(600, 0.3);
+            });
+        });
+
+        // Release Action
+        sendLanternBtn.addEventListener('click', () => {
+            const message = wishMessageInput.value.trim();
+            if (!message) {
+                showToast('ကျေးဇူးပြု၍ ဆုတောင်းစာ ရေးသားပေးပါ');
+                wishMessageInput.focus();
+                return;
+            }
+
+            const sender = wishSenderNameInput.value.trim() || 'အမည်မဖော်လိုသူ';
+            const newWish = {
+                id: 'wish-' + Date.now(),
+                name: sender,
+                text: message,
+                color: activeSelectedColor,
+                likes: 1,
+                time: 'ခုနက'
+            };
+
+            // Store wish
+            wishes.unshift(newWish);
+            saveWishesToStorage();
+
+            // Close Modal
+            createModal.classList.add('hidden');
+            wishMessageInput.value = '';
+            wishSenderNameInput.value = '';
+            charCounter.textContent = '0 / 220';
+
+            // Launch lantern from bottom center
+            const spawnX = width * 0.5 + (Math.random() - 0.5) * 60;
+            const newLantern = new SkyLantern(newWish, spawnX, height - 10, true);
+            newLantern.vy = -1.2; // faster launch ascent
+            activeLanterns.push(newLantern);
+
+            // Audio & Visual celebratory effects
+            playLaunchSound();
+            triggerFirework(spawnX, height - 60, LANTERN_PALETTES[activeSelectedColor].mid);
+            showToast('ဆုတောင်းမီးပုံးကို ကောင်းကင်သို့ လွှတ်တင်ပြီးပါပြီ! 🏮✨');
+        });
+
+        // --- All Wishes Board Modal ---
+        const wishesWallModal = document.getElementById('wishesWallModal');
+        const openWishesWallBtn = document.getElementById('openWishesWallBtn');
+        const closeWishesWallBtn = document.getElementById('closeWishesWallBtn');
+        const wishesCardGrid = document.getElementById('wishesCardGrid');
+        const wishSearchInput = document.getElementById('wishSearchInput');
+        const wallReleaseBtn = document.getElementById('wallReleaseBtn');
+
+        openWishesWallBtn.addEventListener('click', () => {
+            initAudio();
+            renderWishesWall();
+            wishesWallModal.classList.remove('hidden');
+        });
+
+        closeWishesWallBtn.addEventListener('click', () => {
+            wishesWallModal.classList.add('hidden');
+        });
+
+        wallReleaseBtn.addEventListener('click', () => {
+            wishesWallModal.classList.add('hidden');
+            createModal.classList.remove('hidden');
+        });
+
+        wishSearchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            renderWishesWall(query);
+        });
+
+        function renderWishesWall(filterText = '') {
+            wishesCardGrid.innerHTML = '';
+            const filtered = wishes.filter(w => {
+                if (!filterText) return true;
+                return (w.name && w.name.toLowerCase().includes(filterText)) ||
+                       (w.text && w.text.toLowerCase().includes(filterText));
+            });
+
+            if (filtered.length === 0) {
+                wishesCardGrid.innerHTML = `
+                    <div class="text-center py-12 text-amber-200/50">
+                        <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
+                        <p class="text-sm">ရှာဖွေမှုနှင့် ကိုက်ညီသော ဆုတောင်းစာ မတွေ့ရှိပါ</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(item => {
+                const palette = LANTERN_PALETTES[item.color] || LANTERN_PALETTES.gold;
+                const card = document.createElement('div');
+                card.className = 'p-3.5 sm:p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-amber-400/40 transition flex flex-col justify-between gap-3 shadow-md';
+                card.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow" style="background: ${palette.mid}20; border: 1px solid ${palette.border};">
+                            <span class="w-2.5 h-3.5 rounded-full" style="background: ${palette.mid};"></span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <h4 class="text-xs sm:text-sm font-bold text-amber-200">${item.name || 'အမည်မဖော်လိုသူ'}</h4>
+                                <span class="text-[10px] text-amber-200/40">${item.time || 'မကြာသေးမီက'}</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">${item.text}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-700/40 text-xs">
+                        <span class="text-[11px] text-amber-400/70 font-medium">${palette.name}</span>
+                        <button onclick="likeWishFromWall('${item.id}', this)" class="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900 border border-amber-500/20 text-rose-300 hover:text-rose-100 hover:border-rose-400 transition active:scale-95 text-xs">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i>
+                            <span class="like-num">${item.likes || 0}</span>
+                            <span>သာဓု</span>
+                        </button>
+                    </div>
+                `;
+                wishesCardGrid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Global Helper for card like
+        window.likeWishFromWall = function(wishId, btnElement) {
+            const target = wishes.find(w => w.id === wishId);
+            if (target) {
+                target.likes = (target.likes || 0) + 1;
+                const numSpan = btnElement.querySelector('.like-num');
+                if (numSpan) numSpan.textContent = target.likes;
+                playChimeSound(880, 1.2);
+                saveWishesToStorage();
+                showToast('သာဓု... သာဓု... သာဓု ခေါ်ဆိုပါသည် ✨');
+            }
+        };
+
+        // --- Audio Toggle Control ---
+        const audioToggleBtn = document.getElementById('audioToggleBtn');
+        const audioIcon = document.getElementById('audioIcon');
+        const audioText = document.getElementById('audioText');
+
+        audioToggleBtn.addEventListener('click', () => {
+            initAudio();
+            isAudioMuted = !isAudioMuted;
+            if (isAudioMuted) {
+                audioIcon.setAttribute('data-lucide', 'volume-x');
+                audioText.textContent = 'အသံ ပိတ်ထား';
+                showToast('အသံ ပိတ်လိုက်ပါပြီ');
+            } else {
+                audioIcon.setAttribute('data-lucide', 'volume-2');
+                audioText.textContent = 'အသံ ဖွင့်ထား';
+                playChimeSound(660, 2);
+                showToast('အသံ ဖွင့်လိုက်ပါပြီ');
+            }
+            lucide.createIcons();
+        });
+
+        // Toast Message Notification Helper
+        let toastTimeout = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastMessage');
+            toastText.textContent = msg;
+
+            toast.classList.remove('opacity-0', '-translate-y-10');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-10');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3000);
+        }
+
+        // Window resize management
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        // Lifecycle Initialize
+        window.onload = function () {
+            resizeCanvas();
+            initWishesData();
+            seedLanterns();
+            lucide.createIcons();
+            animate();
+
+            // First user interaction auto-starts Web Audio context
+            const resumeAudioOnTouch = () => {
+                initAudio();
+                window.removeEventListener('click', resumeAudioOnTouch);
+                window.removeEventListener('touchstart', resumeAudioOnTouch);
+            };
+            window.addEventListener('click', resumeAudioOnTouch, { once: true });
+            window.addEventListener('touchstart', resumeAudioOnTouch, { once: true });
+        };
+    </script>
+</body>
+</html>

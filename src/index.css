@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Padauk', 'Noto Sans Myanmar', system-ui, -apple-system, sans-serif;
+  }
+}
+
+.sky-bg {
+  background: radial-gradient(circle at 75% 20%, #1e1b4b 0%, #0f172a 45%, #030712 100%);
+}
+
+.moon-glow {
+  box-shadow: 0 0 50px 20px rgba(254, 240, 138, 0.45),
+              0 0 100px 50px rgba(251, 191, 36, 0.25),
+              inset 0 0 25px rgba(245, 158, 11, 0.3);
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+
+@keyframes flameFlicker {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes floatCloud {
+  0% { transform: translateX(-8%); }
+  50% { transform: translateX(8%); }
+  100% { transform: translateX(-8%); }
+}
+
+.lantern-sway {
+  animation: sway 3.5s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+
+.flame-glow {
+  animation: flameFlicker 1.8s ease-in-out infinite alternate;
+}
+
+.cloud-anim {
+  animation: floatCloud 45s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for Wish Modals */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.7);
+}

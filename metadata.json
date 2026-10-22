@@ -1,0 +1,6 @@
+{
+  "name": "သီတင်းကျွတ် မီးပုံးပျံ ဆုတောင်းလွှာ - Thadingyut Floating Lantern Wishes",
+  "description": "မြန်မာ့ရိုးရာ သီတင်းကျွတ် မီးထွန်းပွဲတော် ဆုတောင်းမီးပုံးပျံများကို လွှတ်တင်ပြီး လူတိုင်း၏ မေတ္တာဆုတောင်းစာများကို တိုက်ရိုက် ကြည့်ရှု သာဓုခေါ်ဆိုနိုင်သော အွန်လိုင်းဆုတောင်းလွှာ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
