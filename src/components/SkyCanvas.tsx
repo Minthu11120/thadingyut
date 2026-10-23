@@ -91,7 +91,7 @@ class SkyLantern {
     this.launchSparkleCooldown = 0;
   }
 
-  update(screenWidth: number, screenHeight: number, wishesPool: Wish[], addEmber: (x: number, y: number, color: string) => void) {
+  update(screenWidth: number, screenHeight: number, addEmber: (x: number, y: number, color: string) => void) {
     this.y += this.vy;
     this.angle += this.swaySpeed;
     this.x += Math.sin(this.angle + this.swayOffset) * 0.45 + this.vx;
@@ -112,10 +112,6 @@ class SkyLantern {
       this.x = Math.random() * (screenWidth - 80) + 40;
       this.isNew = false;
       this.vy = -(Math.random() * 0.4 + 0.35) * (this.depth * 1.1);
-
-      if (wishesPool.length > 0) {
-        this.wish = wishesPool[Math.floor(Math.random() * wishesPool.length)];
-      }
     }
   }
 
@@ -419,25 +415,39 @@ export const SkyCanvas: React.FC<SkyCanvasProps> = ({
     }
     starsRef.current = newStars;
 
-    // Seed lanterns if empty
+    // Seed lanterns if empty - strictly 1-to-1: each wish gets exactly ONE lantern in the sky!
     if (lanternsRef.current.length === 0 && wishesRef.current.length > 0) {
-      const targetCount = Math.min(26, Math.max(14, Math.floor(canvas.width / 45)));
       const pool = wishesRef.current;
       const initialLanterns: SkyLantern[] = [];
+      const count = Math.min(pool.length, 35);
 
-      for (let i = 0; i < targetCount; i++) {
-        const wish = pool[i % pool.length];
+      for (let i = 0; i < count; i++) {
+        const wish = pool[i];
         initialLanterns.push(new SkyLantern(wish, canvas.width, canvas.height));
       }
       lanternsRef.current = initialLanterns;
     }
   }, []);
 
-  // Update existing lanterns wish pool if new wishes arrive
+  // Synchronize lanterns when wishes list updates
   useEffect(() => {
-    if (lanternsRef.current.length === 0 && wishes.length > 0 && canvasRef.current) {
+    if (!canvasRef.current || wishes.length === 0) return;
+
+    if (lanternsRef.current.length === 0) {
       handleResize();
+      return;
     }
+
+    // Ensure each wish has exactly ONE lantern in the sky
+    wishes.forEach((wish) => {
+      const exists = lanternsRef.current.some((l) => l.wish.id === wish.id);
+      if (!exists && lanternsRef.current.length < 35) {
+        const canvas = canvasRef.current!;
+        const spawnX = Math.random() * (canvas.width - 80) + 40;
+        const spawnY = canvas.height + 10;
+        lanternsRef.current.push(new SkyLantern(wish, canvas.width, canvas.height, spawnX, spawnY, true));
+      }
+    });
   }, [wishes, handleResize]);
 
   // Main render loop
@@ -597,7 +607,7 @@ export const SkyCanvas: React.FC<SkyCanvasProps> = ({
       // 4. Update and draw lanterns
       for (let i = 0; i < lanterns.length; i++) {
         const lantern = lanterns[i];
-        lantern.update(width, height, wishesRef.current, addEmber);
+        lantern.update(width, height, addEmber);
         lantern.draw(ctx);
       }
 

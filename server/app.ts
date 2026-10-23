@@ -32,10 +32,14 @@ const isVercel = process.env.VERCEL === '1' || Boolean(process.env.AWS_LAMBDA_FU
 const DATA_DIR = isVercel ? path.resolve('/tmp', 'data') : path.resolve(process.cwd(), 'data');
 const DATA_FILE = path.resolve(DATA_DIR, 'wishes.json');
 
+// Cloud KV integration (Optional: Vercel KV / Upstash Redis if configured)
+const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
 let wishes: Wish[] = [];
 
-// Initialize data storage
-function loadWishes(): Wish[] {
+// Initialize data storage from local file /tmp or local data
+function loadWishesFromDisk(): Wish[] {
   try {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -64,9 +68,44 @@ function saveWishesToDisk() {
   } catch (err) {
     console.error('Storage save error:', err);
   }
+
+  // Also sync to Cloud KV if available
+  if (kvUrl && kvToken) {
+    fetch(`${kvUrl}/set/thadingyut_wishes`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${kvToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(JSON.stringify(wishes)),
+    }).catch(err => console.error('Cloud KV set error:', err));
+  }
 }
 
-wishes = loadWishes();
+// Initial load
+wishes = loadWishesFromDisk();
+
+// Async Cloud KV load if credentials exist
+async function syncFromCloudKV() {
+  if (kvUrl && kvToken) {
+    try {
+      const resp = await fetch(`${kvUrl}/get/thadingyut_wishes`, {
+        headers: { Authorization: `Bearer ${kvToken}` },
+      });
+      const data = await resp.json();
+      if (data && data.result) {
+        const cloudWishes = JSON.parse(data.result);
+        if (Array.isArray(cloudWishes)) {
+          wishes = cloudWishes;
+          saveWishesToDisk();
+        }
+      }
+    } catch (err) {
+      console.warn('Cloud KV load error:', err);
+    }
+  }
+}
+syncFromCloudKV();
 
 // SSE Connected Clients Registry
 type SseClient = {
@@ -83,12 +122,12 @@ function broadcast(event: { type: string; [key: string]: unknown }) {
     try {
       client.res.write(payload);
     } catch {
-      // Ignore dead connection
+      // Dead client
     }
   });
 }
 
-// Keep-alive heartbeat every 20 seconds to keep SSE connections open (where supported)
+// Keep-alive heartbeat every 20 seconds
 setInterval(() => {
   clients.forEach(client => {
     try {
@@ -101,10 +140,12 @@ setInterval(() => {
 
 // API Endpoints
 // 1. GET /api/wishes - Fetch all public wishes
-app.get('/api/wishes', (_req, res) => {
-  // Reload in case another serverless instance wrote to /tmp
+app.get('/api/wishes', async (_req, res) => {
   if (isVercel) {
-    wishes = loadWishes();
+    const diskWishes = loadWishesFromDisk();
+    if (diskWishes.length > wishes.length) {
+      wishes = diskWishes;
+    }
   }
   res.json({
     success: true,
@@ -113,7 +154,7 @@ app.get('/api/wishes', (_req, res) => {
   });
 });
 
-// 2. POST /api/wishes - Add new public wish & broadcast to everyone
+// 2. POST /api/wishes - Add new public wish
 app.post('/api/wishes', (req, res) => {
   const { name, text, color } = req.body;
 
@@ -139,7 +180,6 @@ app.post('/api/wishes', (req, res) => {
   wishes.unshift(newWish);
   saveWishesToDisk();
 
-  // Real-time broadcast to all connected clients
   broadcast({
     type: 'new_wish',
     wish: newWish,
@@ -151,7 +191,36 @@ app.post('/api/wishes', (req, res) => {
   });
 });
 
-// 3. POST /api/wishes/:id/like - Like / Sadhu reaction
+// 3. POST /api/wishes/sync - Client-to-Server bidirectional sync for serverless durability
+app.post('/api/wishes/sync', (req, res) => {
+  const clientWishes = req.body?.wishes;
+  if (Array.isArray(clientWishes) && clientWishes.length > 0) {
+    const map = new Map<string, Wish>();
+    wishes.forEach(w => map.set(w.id, w));
+
+    clientWishes.forEach((cw: Wish) => {
+      if (cw && cw.id && cw.text) {
+        if (map.has(cw.id)) {
+          const cur = map.get(cw.id)!;
+          map.set(cw.id, { ...cur, likes: Math.max(cur.likes || 0, cw.likes || 0) });
+        } else {
+          map.set(cw.id, cw);
+        }
+      }
+    });
+
+    wishes = Array.from(map.values()).sort((a, b) => b.createdAt - a.createdAt).slice(0, 300);
+    saveWishesToDisk();
+  }
+
+  res.json({
+    success: true,
+    total: wishes.length,
+    wishes: wishes.slice(0, 300),
+  });
+});
+
+// 4. POST /api/wishes/:id/like - Like / Sadhu reaction
 app.post('/api/wishes/:id/like', (req, res) => {
   const { id } = req.params;
   const target = wishes.find(w => w.id === id);
@@ -176,7 +245,7 @@ app.post('/api/wishes/:id/like', (req, res) => {
   });
 });
 
-// 4. GET /api/stats - Live stats
+// 5. GET /api/stats - Live stats
 app.get('/api/stats', (_req, res) => {
   const totalLikes = wishes.reduce((acc, w) => acc + (w.likes || 0), 0);
   res.json({
@@ -186,7 +255,7 @@ app.get('/api/stats', (_req, res) => {
   });
 });
 
-// 5. GET /api/wishes/stream - SSE real-time stream
+// 6. GET /api/wishes/stream - SSE real-time stream
 app.get('/api/wishes/stream', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');

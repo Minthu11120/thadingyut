@@ -22,7 +22,7 @@ export const SkylineBackdrop: React.FC = () => {
 
       {/* Myanmar Pagoda & Bagan Skyline Horizon */}
       <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-        <svg className="w-full h-40 md:h-56 text-slate-950 fill-current drop-shadow-2xl" viewBox="0 0 1200 240" preserveAspectRatio="none">
+        <svg className="w-full h-28 sm:h-36 md:h-52 text-slate-950 fill-current drop-shadow-2xl" viewBox="0 0 1200 240" preserveAspectRatio="none">
           {/* Distant Hills */}
           <path opacity="0.3" fill="#0f172a" d="M0,190 C250,140 450,210 700,165 C950,120 1100,170 1200,150 L1200,240 L0,240 Z"></path>
           {/* Mid Layer Silhouettes */}

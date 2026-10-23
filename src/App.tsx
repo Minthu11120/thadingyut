@@ -12,7 +12,14 @@ import { OilLampIcon } from './components/OilLampIcon.tsx';
 import { Toast } from './components/Toast.tsx';
 
 export default function App() {
-  const [wishes, setWishes] = useState<Wish[]>([]);
+  const [wishes, setWishes] = useState<Wish[]>(() => {
+    try {
+      const cached = localStorage.getItem('thadingyut_wishes_v1');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
   const [selectedWish, setSelectedWish] = useState<Wish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isWallOpen, setIsWallOpen] = useState(false);
@@ -34,15 +41,46 @@ export default function App() {
     }, 3200);
   }, []);
 
-  // Fetch initial wishes
+  // Fetch and bidirectional sync wishes
   const fetchWishes = useCallback(async () => {
     try {
       const res = await fetch('/api/wishes');
       if (res.ok) {
         const data = await res.json();
-        if (data.wishes && Array.isArray(data.wishes)) {
-          setWishes(data.wishes);
-        }
+        const serverWishes: Wish[] = Array.isArray(data.wishes) ? data.wishes : [];
+
+        setWishes((prev) => {
+          const map = new Map<string, Wish>();
+          prev.forEach((w) => map.set(w.id, w));
+
+          serverWishes.forEach((w) => {
+            if (map.has(w.id)) {
+              const existing = map.get(w.id)!;
+              map.set(w.id, { ...existing, likes: Math.max(existing.likes || 0, w.likes || 0) });
+            } else {
+              map.set(w.id, w);
+            }
+          });
+
+          const merged = Array.from(map.values()).sort((a, b) => b.createdAt - a.createdAt);
+
+          try {
+            localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(merged));
+          } catch {
+            // Ignored
+          }
+
+          // If local client has wishes that the serverless instance lost after a cold-start, sync them to server
+          if (merged.length > serverWishes.length) {
+            fetch('/api/wishes/sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ wishes: merged }),
+            }).catch(() => {});
+          }
+
+          return merged;
+        });
       }
     } catch (err) {
       console.warn('Failed to fetch initial wishes:', err);
@@ -108,15 +146,27 @@ export default function App() {
 
               setWishes((prev) => {
                 if (prev.some((w) => w.id === incomingWish.id)) return prev;
-                return [incomingWish, ...prev];
+                const next = [incomingWish, ...prev];
+                try {
+                  localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(next));
+                } catch {
+                  // Ignored
+                }
+                return next;
               });
               setNewlyLaunchedWish(incomingWish);
             } else if (data.type === 'wish_liked' && data.id) {
-              setWishes((prev) =>
-                prev.map((w) =>
+              setWishes((prev) => {
+                const next = prev.map((w) =>
                   w.id === data.id ? { ...w, likes: data.likes } : w
-                )
-              );
+                );
+                try {
+                  localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(next));
+                } catch {
+                  // Ignored
+                }
+                return next;
+              });
               setSelectedWish((cur) =>
                 cur && cur.id === data.id ? { ...cur, likes: data.likes } : cur
               );
@@ -175,7 +225,15 @@ export default function App() {
       const newWish: Wish = data.wish;
 
       locallyLaunchedIdsRef.current.add(newWish.id);
-      setWishes((prev) => [newWish, ...prev.filter((w) => w.id !== newWish.id)]);
+      setWishes((prev) => {
+        const next = [newWish, ...prev.filter((w) => w.id !== newWish.id)];
+        try {
+          localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(next));
+        } catch {
+          // Ignored
+        }
+        return next;
+      });
       setNewlyLaunchedWish(newWish);
       showToast('ဆုတောင်းမီးပုံးကို ကောင်းကင်သို့ အောင်မြင်စွာ လွှတ်တင်ပြီးပါပြီ! 🏮✨');
       return newWish;
@@ -189,9 +247,15 @@ export default function App() {
   const handleLikeWish = async (id: string) => {
     try {
       // Optimistic update
-      setWishes((prev) =>
-        prev.map((w) => (w.id === id ? { ...w, likes: (w.likes || 0) + 1 } : w))
-      );
+      setWishes((prev) => {
+        const next = prev.map((w) => (w.id === id ? { ...w, likes: (w.likes || 0) + 1 } : w));
+        try {
+          localStorage.setItem('thadingyut_wishes_v1', JSON.stringify(next));
+        } catch {
+          // Ignored
+        }
+        return next;
+      });
       setSelectedWish((cur) =>
         cur && cur.id === id ? { ...cur, likes: (cur.likes || 0) + 1 } : cur
       );
@@ -208,7 +272,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-screen h-screen sky-bg text-amber-50 overflow-hidden select-none">
+    <div className="relative w-full h-[100dvh] min-h-[100dvh] sky-bg text-amber-50 overflow-hidden select-none">
       {/* 2D Particle Canvas: Stars, Floating Lanterns, Fireworks, Shooting Stars */}
       <SkyCanvas
         wishes={wishes}
@@ -245,7 +309,7 @@ export default function App() {
       )}
 
       {/* Bottom Center Call-To-Action: Release Lantern Button */}
-      <div className="absolute bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 w-auto max-w-sm px-4">
+      <div className="absolute bottom-8 sm:bottom-7 md:bottom-8 mb-[env(safe-area-inset-bottom)] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 w-auto max-w-sm px-4 pointer-events-auto">
         <button
           onClick={() => {
             initAudio();
